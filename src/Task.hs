@@ -26,8 +26,7 @@ module Task
   )
 where
 
-import Data.Char
-import Data.List
+import Data.List (intersperse)
 
 --   ____  _____   _       _                           _
 --  | __ )|  ___| (_)_ __ | |_ ___ _ __ _ __  _ __ ___| |_ ___ _ __
@@ -70,7 +69,7 @@ data Tape a
         tapeValue :: a,
         rightTape :: [a]
       }
-  deriving (Eq, Ord)
+  deriving stock (Eq, Ord)
 
 -- We need a special instance to handle infinite tapes. The derived
 -- implementation would go into an infinite loop.
@@ -84,6 +83,7 @@ instance Show a => Show (Tape a) where
       <> tapeify (take 5 right)
       <> "]"
     where
+      tapeify :: Show x => [x] -> String
       tapeify = mconcat . intersperse " " . fmap show
 
 -- | Creates a tape from a list.
@@ -186,7 +186,7 @@ data BFState
         -- | The output stream of the BF interpreter.
         bfOutput :: [Int]
       }
-  deriving (Eq, Show)
+  deriving stock (Eq, Show)
 
 -- | This represents the errors that can occur while executing a BF program.
 data BFError
@@ -194,7 +194,7 @@ data BFError
     NotEnoughInput
   | -- | Tried going past the end of the data tape (if it was finite).
     DataTapeExhausted
-  deriving (Show, Eq)
+  deriving stock (Show, Eq)
 
 -- | The monad in which we will interpreting the BF commands.
 type BFMonad a = ErrorState BFError BFState a
@@ -259,7 +259,7 @@ data BFCommand
     ReadInput
   | -- | The `.` command.
     WriteOutput
-  deriving (Eq, Show)
+  deriving stock (Eq, Show)
 
 type BFProgram = [BFCommand]
 

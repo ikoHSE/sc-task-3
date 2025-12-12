@@ -12,7 +12,7 @@ module Tests
 where
 
 import Control.Arrow
-import Data.List
+import Data.List (sort)
 import Data.Maybe
 import Task
 import Test.QuickCheck
@@ -319,7 +319,8 @@ tests = parallel $ do
               (x : xx) -> ((bfDataTape &&& bfInput) . snd <$> runErrorState (executeCommand ReadInput) (state t l)) === Right ((t {tapeValue = x}, xx))
         property testProperty
       specify "Loop" $ do
-        let toList t = reverse (leftTape t) <> [tapeValue t] <> rightTape t
+        let toList :: Tape a -> [a]
+            toList t = reverse (leftTape t) <> [tapeValue t] <> rightTape t
             testLoop i o l =
               (toList . bfDataTape . snd <$> runErrorState (executeCommand (Loop l)) (state . fromJust . initializeTape $ i))
                 `shouldBe` Right o

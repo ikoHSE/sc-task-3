@@ -2,8 +2,11 @@ name:                task
 version:             0.1.0.0
 license:             Unlicense
 
+default-extensions:
+  - DerivingStrategies
+
 dependencies:
-  - base >= 4.7 && < 5
+  - base
 
 library:
   source-dirs:      src
